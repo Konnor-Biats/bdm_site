@@ -1,5 +1,7 @@
 // Home Button
 
+//MOVE TO THE RIGHT SIDE???
+
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'

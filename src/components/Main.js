@@ -127,7 +127,7 @@ const Main = () => {
 
   return (
     <MainContainer>
-          <DarkDiv click={click}/>
+      <DarkDiv click={click}/>
       <Container>
         <HomeButton/>
         <LogoComponent theme={click ? 'dark' : 'light' } />
