@@ -1,10 +1,12 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { useState } from 'react/cjs/react.development'
 import styled from 'styled-components'
 import { keyframes } from 'styled-components'
 import HomeButton from '../subComponents/HomeButton'
 import LogoComponent from '../subComponents/LogoComponent'
 import { Home } from './AllSvgs'
+import Intro from './Intro'
 import SocialMedia from './SocialMedia'
 
 
@@ -38,7 +40,7 @@ z-index:1;
 `
 
 const PORTFOLIO = styled(NavLink)` 
-color: ${props => props.theme.text};
+color: ${props => props.click ? props.theme.body : props.theme.text};
 position: absolute;
 top:50%;
 left: calc(1rem + 2vw);
@@ -58,7 +60,7 @@ justify-content: space-evenly;
 `
 
 const ABOUT = styled(NavLink)` 
-color: ${props => props.theme.text};
+color: ${props => props.click ? props.theme.body : props.theme.text};
 text-decoration: none;
 z-index:1;
 `
@@ -80,8 +82,8 @@ to{
 
 const Center = styled.button`
 position: absolute;
-top: 50%;
-left: 50%;
+top: ${props => props.click ? '85%' : '50%'};
+left: ${props => props.click ? '92%' : '50%'};
 transform: translate(-50%, -50%);
 border: none;
 outline:none;
@@ -92,50 +94,70 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
+transition: all 1s ease;
 
 &>:first-child{
   animation: ${rotate} infinite 1.5s linear;
 }
 
 &>:last-child{
+  display: ${props => props.click ? 'none' : 'inline-block'};
   padding-top: 1rem
 }
+`
 
+const DarkDiv = styled.div`
+position: absolute;
+top: 0;
+bottom: 0;
+background-color: #000;
+right: 50%;
+width: ${props => props.click ? '50%' : '0%'};
+height: ${props => props.click ? '100%' : '0%'};
+z-index: 1;
+transition: height 0.5s ease, width 1s ease 0.5s;
 `
 
 
 const Main = () => {
+
+  const [click, setClick] = useState(false);
+
+  const handleClick = () => setClick(!click)
+
   return (
     <MainContainer>
+          <DarkDiv click={click}/>
       <Container>
         <HomeButton/>
-        <LogoComponent />
-        <SocialMedia />
-
-        <Center>
-          <Home width={150} height={150} fill color='currentColor'/>
-          <span>Click Here!</span>
+        <LogoComponent theme={click ? 'dark' : 'light' } />
+        <SocialMedia theme={click ? 'dark' : 'light' } />
+        <DarkDiv click={click}/>
+        <Center click={click}>
+          <Home onClick={()=> handleClick()} width={click ? 120 : 200} height={click ? 120 : 200} fill color='currentColor'/>
+          <span>Click Me!</span>
         </Center>
 
         <RESUME to="/Resume">
         <h2>Resume</h2>  
         </RESUME>
 
-        <PORTFOLIO to="/Portfolio">
+        <PORTFOLIO to="/Portfolio" click={click}>
         <h2>Portfolio</h2>  
         </PORTFOLIO>
 
         <BottomBar>
-      <ABOUT to="/About">
+      <ABOUT to="/About" click={click}>
         <h2>About</h2>  
       </ABOUT>
 
-      <CONTACT to="/Contact">
+      <CONTACT to="/Contact" click={click}>
         <h2>Contact</h2>  
       </CONTACT>
         </BottomBar>
       
       </Container>
+      {click ? <Intro click={click} /> : null}
     </MainContainer>
   )
 }
